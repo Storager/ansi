@@ -1,0 +1,5 @@
+JENKINS_WORKDIR="/opt/jenkins/slave_home"
+JENKINS_USER="jenkins"
+JENKINS_URL="http://10.0.0.1:8080"
+JENKINS_NODENAME="10.0.0.15"
+JENKINS_SECRET=""

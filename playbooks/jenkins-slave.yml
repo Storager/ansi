@@ -1,0 +1,12 @@
+---
+- hosts: host1
+  remote_user: vagrant
+  tasks:
+  - name: Installing OpenJDK
+    yum: name=java-openjdk state=latest
+    sudo: yes
+  - name: Create jenkins user
+    user: name=jenkins comment="Jenkins slave user" home=/opt/jenkins shell=/bin/bash
+    sudo: yes
+    tags:
+     - user
