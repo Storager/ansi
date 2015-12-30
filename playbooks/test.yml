@@ -1,0 +1,14 @@
+---
+- hosts: host2
+  remote_user: dtsirul
+  vars:
+    - config_file: "/etc/sysconfig/jenkins-slave"
+    - jenkins_workdir: "/opt/jenkins/slave_home"
+    - jenkins_user: "jenkins"
+    - jenkins_url: "http://10.0.0.1:8080"
+    - jenkins_nodename: "10.0.0.15"
+    - jenkins_secret: "affb104db1acf8186e24a232396eb778adaff063fe14f2b1b527f3f1653a8050"
+  tasks:
+  - name: Installing OpenJDK
+    template: src=../src/jenkins-slave dest=/tmp/jenkins-slave
+    sudo: yes
