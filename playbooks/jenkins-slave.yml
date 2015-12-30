@@ -27,32 +27,8 @@
     tags:
      - user
   - name: Create jenkins config file
-    file: path={{ config_file }} state=touch mode="u=rw,g=r,o=r"
-    sudo: yes
-  
-  - name: Create jenkins workdir
-    file: path={{ jenkins_workdir }} state=directory owner=jenkins group=jenkins
-    sudo: yes
-  
-  - name: Create jenkins_workdir
-    lineinfile: dest={{ config_file }} line=JENKINS_WORKDIR={{ jenkins_workdir }}
-    sudo: yes
-
-  - name: Create jenkins user
-    lineinfile: dest={{ config_file }} line=JENKINS_USER={{ jenkins_user }}
-    sudo: yes
-
-  - name: Create jenkins url
-    lineinfile: dest={{ config_file }} line=JENKINS_URL={{ jenkins_url }}
-    sudo: yes
-
-  - name: Create jenkins nodename
-    lineinfile: dest={{ config_file }} line=JENKINS_NODENAME={{ jenkins_nodename }}
-    sudo: yes
-
-  - name: Create jenkins secret
-    lineinfile: dest={{ config_file }} line=JENKINS_SECRET={{ jenkins_secret }}
-    sudo: yes
+    template: src=../src/jenkins-slave dest={{ config_file }} mode=644
+    sudo: yes    
 
   - name: Copy Initfile
     copy: src=../src/jenkins-slave.init dest=/etc/init.d/jenkins-slave mode=755
@@ -60,6 +36,10 @@
 
   - name: Register init file
     shell: chkconfig jenkins-slave on
+    sudo: yes
+    
+  - name: Create jenkins workdir
+    file: path={{ jenkins_workdir }} state=directory owner=jenkins group=jenkins
     sudo: yes
 
   - name: Start service jenkins-slave

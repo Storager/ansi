@@ -1,0 +1,5 @@
+JENKINS_WORKDIR={{ jenkins_workdir }}
+JENKINS_USER={{ jenkins_user }}
+JENKINS_URL={{ jenkins_url }}
+JENKINS_NODENAME={{ jenkins_nodename }}
+JENKINS_SECRET={{ jenkins_secret }}
