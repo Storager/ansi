@@ -31,6 +31,7 @@ start()
         su - $JENKINS_USER sh -c "\
       java -jar $JENKINS_WORKDIR/slave.jar \
              -jnlpUrl $JENKINS_URL/computer/$JENKINS_NODENAME/slave-agent.jnlp \
+     		-secret $JENKINS_SECRET \
              >$JENKINS_WORKDIR/slave.log 2>&1 &"
  
         echo Done.
