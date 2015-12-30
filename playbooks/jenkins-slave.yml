@@ -1,12 +1,66 @@
 ---
 - hosts: host1
   remote_user: vagrant
+  vars:
+    - config_file: "/etc/sysconfig/jenkins-slave"
+    - jenkins_workdir: "/opt/jenkins/slave_home"
+    - jenkins_user: \"jenkins\"
+    - jenkins_url: \"http://10.0.0.1:8080\"
+    - jenkins_nodename: \"10.0.0.15\"
+    - jenkins_secret: \"42asfr4sd5g4df4g25df4h2gf4h2gf4\"
+  tasks:
   tasks:
   - name: Installing OpenJDK
     yum: name=java-openjdk state=latest
     sudo: yes
+  
+  - name: Installing git
+    yum: name=git state=latest
+    sudo: yes
+    tags:
+    - git_install
+  
   - name: Create jenkins user
     user: name=jenkins comment="Jenkins slave user" home=/opt/jenkins shell=/bin/bash
     sudo: yes
+    ignore_errors: yes
     tags:
      - user
+  - name: Create jenkins config file
+    file: path={{ config_file }} state=touch mode="u=rw,g=r,o=r"
+    sudo: yes
+  
+  - name: Create jenkins workdir
+    file: path={{ jenkins_workdir }} state=directory owner=jenkins group=jenkins
+    sudo: yes
+  
+  - name: Create jenkins_workdir
+    lineinfile: dest={{ config_file }} line=JENKINS_WORKDIR={{ jenkins_workdir }}
+    sudo: yes
+	
+  - name: Create jenkins user
+    lineinfile: dest={{ config_file }} line=JENKINS_USER={{ jenkins_user }}
+    sudo: yes
+	
+  - name: Create jenkins url
+    lineinfile: dest={{ config_file }} line=JENKINS_URL={{ jenkins_url }}
+    sudo: yes
+	
+  - name: Create jenkins nodename
+    lineinfile: dest={{ config_file }} line=JENKINS_NODENAME={{ jenkins_nodename }}
+    sudo: yes
+	
+  - name: Create jenkins secret
+    lineinfile: dest={{ config_file }} line=JENKINS_SECRET={{ jenkins_secret }}
+    sudo: yes
+	
+  - name: Copy Initfile
+    copy: src=src/jenkins-slave.init dest=/etc/init.d/jenkins-slave mode=755
+    sudo: yes
+  - name: Register init file
+    shell: chkconfig jenkins-slave on
+    sudo: yes
+	
+  - name: Start service jenkins-slave
+    service: name=jenkins-slave state=started
+    sudo: yes
