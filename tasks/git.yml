@@ -1,0 +1,4 @@
+- name: Installing git
+  yum: name=git state=latest
+  sudo: yes
+  tags:

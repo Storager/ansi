@@ -1,0 +1,6 @@
+---
+- name: Installing OpenJDK
+  yum: name=java-openjdk state=latest
+  sudo: yes
+  tags:
+  - openjdk
