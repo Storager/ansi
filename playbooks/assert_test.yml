@@ -1,6 +1,7 @@
 ---
 - hosts: host1
-  remote_user: root
+  remote_user: vagrant
+  sudo: yes
   vars_files: 
   - "../vars/vars.yml"
   tasks:
@@ -23,8 +24,10 @@
       shell: grep jenkins /etc/passwd
       register: jenkins_user_passwd
     - name: Check if service started
-      shell: service jenkins status
+      shell: service jenkins-slave status
       register: service_status
+      tags:
+       - service-check
 
     - assert:
        that:
@@ -34,4 +37,4 @@
          - init_file_created.stat.exists
          - jenkins_workdir_created.stat.exists
          - "'jenkins:x' in jenkins_user_passwd.stdout"
-         - "'Active: active' in service_status.stdout"
+         - "'running' in service_status.stdout"

@@ -32,7 +32,7 @@ Vagrant.configure(2) do |config|
 ####Ansible insertion
   config.vm.provision "ansible" do |ansible|
     ansible.inventory_path = "inventory"
-    ansible.playbook = "playbooks/jenkins-slave.yml"
+    ansible.playbook = "site.yml"
     ansible.verbose = "-vv"
     ansible.sudo = true
     ansible.limit = 'all'
