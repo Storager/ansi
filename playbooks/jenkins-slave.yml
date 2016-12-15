@@ -34,7 +34,9 @@
     sudo: yes
 
   - name: Register init file
-    service: jenkins-slave state=enabled
+    service:
+      name: jenkins-slave
+      state: enabled
     sudo: yes
 
   - name: Create jenkins workdir
