@@ -9,17 +9,16 @@
     - jenkins_nodename: "10.0.0.15"
     - jenkins_secret: "affb104db1acf8186e24a232396eb778adaff063fe14f2b1b527f3f1653a8050"
   tasks:
-  tasks:
   - name: Installing OpenJDK
-    yum: name=java-openjdk state=latest
+    yum: name=java-openjdk state=present
     sudo: yes
-  
+
   - name: Installing git
-    yum: name=git state=latest
+    yum: name=git state=present
     sudo: yes
     tags:
     - git_install
-  
+
   - name: Create jenkins user
     user: name=jenkins comment="Jenkins slave user" home=/opt/jenkins shell=/bin/bash
     sudo: yes
@@ -27,8 +26,8 @@
     tags:
      - user
   - name: Create jenkins config file
-    template: src=../src/jenkins-slave dest={{ config_file }} mode=644
-    sudo: yes    
+    template: src=../src/jenkins-slave dest={{ config_file }} mode=0644
+    sudo: yes
 
   - name: Copy Initfile
     copy: src=../src/jenkins-slave.init dest=/etc/init.d/jenkins-slave mode=755
@@ -37,7 +36,7 @@
   - name: Register init file
     shell: chkconfig jenkins-slave on
     sudo: yes
-    
+
   - name: Create jenkins workdir
     file: path={{ jenkins_workdir }} state=directory owner=jenkins group=jenkins
     sudo: yes
