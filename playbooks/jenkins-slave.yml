@@ -1,6 +1,7 @@
 ---
 - hosts: host1
   remote_user: vagrant
+  become: true
   vars:
     - config_file: "/etc/sysconfig/jenkins-slave"
     - jenkins_workdir: "/opt/jenkins/slave_home"
@@ -11,38 +12,30 @@
   tasks:
   - name: Installing OpenJDK
     yum: name=java-openjdk state=present
-    sudo: yes
 
   - name: Installing git
     yum: name=git state=present
-    sudo: yes
     tags:
     - git_install
 
   - name: Create jenkins user
     user: name=jenkins comment="Jenkins slave user" home=/opt/jenkins shell=/bin/bash
-    sudo: yes
     ignore_errors: yes
     tags:
      - user
   - name: Create jenkins config file
     template: src=../src/jenkins-slave dest={{ config_file }} mode=0644
-    sudo: yes
 
   - name: Copy Initfile
     copy: src=../src/jenkins-slave.init dest=/etc/init.d/jenkins-slave mode=0755
-    sudo: yes
 
   - name: Register init file
     service:
       name: jenkins-slave
       state: enabled
-    sudo: yes
 
   - name: Create jenkins workdir
     file: path={{ jenkins_workdir }} state=directory owner=jenkins group=jenkins
-    sudo: yes
 
   - name: Start service jenkins-slave
     service: name=jenkins-slave state=started
-    sudo: yes
