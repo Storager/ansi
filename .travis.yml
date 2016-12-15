@@ -1,4 +1,4 @@
 install:
-  - pip2 install ansible-lint
+  - sudo pip2 install ansible-lint
 script:
   - ansible-lint site.yml
