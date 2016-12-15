@@ -1,3 +1,4 @@
+language: python
 install:
   - sudo pip2 install ansible-lint
 script:
